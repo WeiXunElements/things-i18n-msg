@@ -1,0 +1,371 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../things-global-behavior/things-global-behavior.html">
+
+<!--
+
+### 설정
+동 i18n은 i18n-msg을 Things Framework에 맞게 수정하여 서버 및 local로 부터 언어 데이타를 받아서 
+화면에 넣어 주는 형태로 되어 있다. 
+
+main page 혹은 things-setting으로 dataGlobals에 Base Url 및 locale을 수정하여 notifyPath를 해 준다.:
+
+    window.addEventListener('WebComponentsReady', function() {
+      _thingsGlobalBehaviorInstances[0].set('globals.baseUrl', 'http://localhost:8080/components/things-i18n-msg/demo');
+      _thingsGlobalBehaviorInstances[0].set('globals.locale', 'en');
+    });
+
+### 데이타 격식 및 Path
+
+<b> 격식 :</b>
+{
+  "locale" : {
+    key:value
+  }
+}
+  <b>Example</b>
+  {
+    "ko-KR":{
+      "days": "일",
+      "hours": "시간",
+      "minutes": "분"
+    }
+  }
+
+<b> Path :</b> 
+Local에 Message.Json파일이 있을 경우 root/terminologies/resource아래데 {{locale}}.json형태로 저장되어 있어야 한다.
+
+<b>Example</b> - 전체 `<things-i18n-msg>` instances에 URL경로 변경을 알리며 데아타를 Refresh한다.:
+
+    _thingsGlobalBehaviorInstances[0].set('globals.baseUrl', 'http://localhost:8080/components/things-i18n-msg/demo');
+
+<b>Example</b> - 특수한 테그에서 해당 태그에만의 locale파일 위치를 지정할 수 있다.:
+
+    <i18n-msg messages-url="path/to/locales">fallback text</i18n-msg>
+
+<b>Note:</b> 하지만 동일한 locale에 대하여서는 데이타를 한번만 받아 온다.<things-i18n-msg>`.
+
+### Fallback text
+
+만일 msgid를 key로 검색한 결과가 없으면 "fallback text"를 그대로 둔다.
+
+    <i18n-msg msgid="unknownmsgid">fallback text</i18n-msg>
+### With Data Binding
+    <template is="dom-bind">
+        <things-i18n-msg msgid="days" msg="{{days}}"></things-i18n-msg>
+        <p>Example of updating an attribute:
+            <input id="input" placeholder="[[days]]">
+        </p>
+    </template>
+### Example of updating an attribute with getMsg() method:
+    <input id="input" placeholder="Days">
+    <script>
+      var el = document.createElement('things-i18n-msg');
+      el.msgid = 'minutes';
+      document.querySelector('#dynamic').appendChild(el);
+    </script>
+
+@demo demo/index.html
+-->
+<dom-module id="things-i18n-msg">
+<script>
+(function () {
+
+  var _thingsI18nInstances = []; // Holds all i18n-msg elements to have them easily updated with translation messages.
+  var _thingsI18nfetching = false; // True if there's an outstanding XHR fetching a locale file.
+  var _thingsI18nInstancesUpdated = 0;
+
+  Polymer({
+    is: 'things-i18n-msg',
+
+    /**
+     * The `i18n-language-ready` is fired after the locale was fetched and all `<things-i18n-msg>` elements were updated.
+     *
+     * @event i18n-language-ready
+     * @detail {{language: String}}
+     */
+    
+    /**
+     * The `i18n-load-language-failure` is fired when xhr status is not 200 or 0
+     *
+     * @event  i18n-load-language-failure
+     * @detail e.target
+     */
+    
+    /**
+     * The `i18n-load-language-error` is fired when xhr.onerror event fired
+     * @event  i18n-load-language-error
+     * @detail e.target
+     */
+
+    properties: {
+      /**
+       * The message id (key), locale[msgid]로 데이타를 검색
+       */
+      msgid: {
+        type: String,
+        value: null,
+        observer: '_msgidChanged'
+      },
+
+      /**
+       * 현재 사용될 Language
+       */
+      language: {
+        type: String,
+        value: null,
+        observer: '_languageChanged',
+        readOnly: true
+      },
+
+      /**
+       * localize파일이 저장된 root
+       */
+      messagesUrl: {
+        type: String,
+        value: 'terminologies/resource'
+      },
+
+      /**
+       * msgid로 검색한 msg
+       */
+      msg :{
+        type:String,
+        notify:true
+      }
+      
+    },
+
+    /**
+     * An object containing the set of known language locales that have been loaded.
+     */
+    locales: {
+      type: Object,
+      value: _thingsDataGlobal.locales // static
+    },
+    behaviors: [
+      Things.GlobalBehavior
+      // Things.MsgBoxBehavior
+    ],
+    observers:[
+      '_observerUrl(globals.baseUrl)',
+      '_observerLang(globals.locale)',
+      '_observerMessageUrl(messagesUrl)'
+    ],
+    /**
+     * Observer Lib를 사용하여 전역 변수  things.globals.baseUrl과 this.globals.locale을 monitoring하고 있음 
+     * 변경시 Json을 다시 받아와서 번역결과를 반영함.
+     */
+    ready: function() {
+      _thingsI18nInstances.push(this);
+    },
+    /**
+     * Observe Globals locale
+     */
+    _observerLang:function (locale) {
+      _thingsI18nInstancesUpdated = 0;
+      if(locale) this._setLanguage(locale);
+    },
+    /**
+     * Observe Globals base url
+     */
+    _observerUrl:function (url) {
+      _thingsI18nInstancesUpdated = 0;
+      if(url) this._fetchLanguage();
+    },
+    /**
+     * message url변경시 language fetch
+     */
+    _observerMessageUrl:function(messagesUrl){
+      _thingsI18nInstancesUpdated = 0;
+      if(messagesUrl) this._fetchLanguage();
+    },
+
+    attached: function() {
+      var msg = this.getMsg(this.msgid)
+      if (msg) {
+        this.innerHTML = msg;
+        this.msg = msg;
+      }
+    },
+    /**
+     * 
+     * @param {string=} opt_msgId Optional message id to lookup. If left off,
+     * the instance's `msgid` property is used.
+     * 
+     * @param {Object=} dataset 검색하는 Message중에서 대체해야하는 변수를 key:Value 형태로 
+     * 전송하여 msg내 해당 되는 Key와 같은 변수가 있으면 replace 없으면 아무작업하지 않음.
+     * 
+     * @return {string|null} a message in the current locale (set by `this.globals.locale`). Translated message or `null` if not found, 
+     */
+    getMsg: function(opt_msgId,dataset) {
+      var msgId = opt_msgId || this.msgid;
+      var lang = this.locales[this.language];
+      if (lang && lang[msgId]) {
+        if(dataset){
+          return this._replaceMsgVariable(lang[msgId], dataset);
+        }
+        return lang[msgId];
+      }
+      return null;
+    },
+
+    /**
+     * msgid가 바뀌면 Message정보를 변경한다.
+     */
+    _msgidChanged: function() {
+      if (this.language && this.locales[this.language] && !_thingsI18nfetching && this.msgid) {
+        this._updateElementMessage();
+      }
+    },
+    /**
+     * language가 바뀌면 현재 Dom의 locales중에 해당 언어가 있으면 해당 언어의 message값으로 바꾸고
+     * 없으면 XHR을 통하여 Json정보를 가져온다.
+     */
+    _languageChanged: function() {
+      // Don't fetch .json file if it has already been
+      // fetched or another instance is already trying to.
+      if (this.language && this.locales[this.language] && !_thingsI18nfetching) {
+        // Send one signal that language changed to outside.
+        if (_thingsI18nInstancesUpdated == _thingsI18nInstances.length - 1) {
+          this.fire('i18n-language-ready', {language: this.language});
+        }
+
+        this._updateElementMessage();
+        _thingsI18nInstancesUpdated++;
+
+        return;
+      } else if (!this.language || this.locales[this.language] || _thingsI18nfetching) {
+        return;
+      }
+
+      this._fetchLanguage();
+    },
+    /**
+     * this.globals.url기본으로 데이타를 받아오지만 만일 messagesUrl에 값이 있으면 messagesUrl을 기준으로 한다.
+     * terminologies/resource.json을 합쳐서 해당 Json파일을 받아온다.
+     */
+    _fetchLanguage: function() {
+      if (_thingsI18nfetching) {
+        return;
+      }
+
+      _thingsI18nfetching = true;
+
+      if(!this.globals.baseUrl||!this.messagesUrl||!this.language){
+        if(!this.globals.baseUrl){
+          //Do Not Thing
+        }else if(!this.messagesUrl){
+          console.warn('message url is null')
+        }else{
+          console.warn('language is null')
+        }
+        _thingsI18nfetching= false;
+        return;
+      }
+
+      if(this.locales[this.language]&&this.locales[this.language].length>0){
+        return;
+      }
+
+      var url = this.globals.baseUrl+'/'+this.messagesUrl+'/'+this.language+'.json';
+
+      //1. create xhr requesst
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', url);
+      xhr.setRequestHeader("Content-type", "application/json");
+      xhr.withCredentials = true;
+
+      //add response event
+      xhr.onload = function(e) {
+       
+        if (e.target.status !== 200 && e.target.status !== 0) {
+          console.log('i18n-load-language-failure');
+          this.fire('i18n-load-language-failure', e.target);
+          return;
+        }
+
+        var resp = JSON.parse(e.target.response)[this.language];
+
+
+        if (!this.msgid in resp) {
+          console.warn(this.localName + ': "' + this.msgid + '" message id was not found in ' + url);
+          return;
+        }
+
+        this.locales[this.language] = resp; // cache this locale.
+
+        this._notifyInstances();
+
+        this.fire('i18n-language-ready', {language: this.language});
+        _thingsI18nfetching = false;
+      }.bind(this);
+
+      // add error event
+      xhr.onerror = function(e) {
+        _thingsI18nfetching = false;
+        console.log('i18n-load-language-error');
+        this.fire('i18n-load-language-error', e.target);
+      };
+      //3. make domain object and send request
+      var requestValue= {};
+
+      requestValue = {"domain" :this.getDomainId(), "locale" : this.globals.locale};
+      xhr.send(JSON.stringify(requestValue));
+    },
+    /**
+     * get domain id from user information
+     */
+    getDomainId : function(){
+      if(this.globals.user){
+        return this.globals.user.domain_id
+      }else{
+        return 1
+      }
+    },
+    /**
+     * 현재 Tag가 존재하는 위치내에 메시지를 opt_instance.innerHtml에 반영한다.
+     */
+    _updateElementMessage: function(opt_instance) {
+      var instance = opt_instance || this;
+
+      var msg = this._replaceMsgVariable(instance.locales[instance.language][instance.msgid], instance.dataset);
+      if (msg) {
+        instance.innerHTML = msg;
+        instance.msg = msg;
+      }
+    },
+    /**
+     * 모든 저장해 놓은 instance에 변경된 메시지를 updadte한다.
+     */
+    _notifyInstances: function() {
+      for (var i = 0, instance; instance = _thingsI18nInstances[i]; ++i) {
+        instance._setLanguage(this.globals.locale);
+
+        if (!instance.locales[instance.language][instance.msgid]) {
+          console.warn(this.localName + ': "' + instance.msgid + '" message id was not found');
+          continue;
+        }
+
+        this._updateElementMessage(instance);
+      }
+    },
+    /**
+     * 메시지 내에 포함되어 있는 변수를 교채한다.
+     * @param {string=} message 내용
+     * @param {Object=} dataset 검색하는 Message중에서 대체해야하는 변수를 key:Value 형태로 
+     * 전송하여 msg내 해당 되는 Key와 같은 변수가 있으면 replace 없으면 아무작업하지 않음.
+     */
+    _replaceMsgVariable: function (message, dataset) {
+      Object.keys(dataset).forEach(function(data){
+        var bracedData = '{'+data.replace(/\$/, '\\$')+'}'
+        var regEx = new RegExp(bracedData, "gi");
+        message = message.replace(regEx, dataset[data]);
+      })
+      return message;
+    }
+
+  });
+
+})();
+</script>
+</dom-module>

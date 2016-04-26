@@ -1,0 +1,29 @@
+{
+  "name": "things-i18n-msg",
+  "version": "1.0.7",
+  "authors": [
+    "Hatio Lab. <heartyoh@hatiolab.com>"
+  ],
+  "description": "An element to get i18n data with element tag.",
+  "keywords": [
+    "web-component",
+    "polymer",
+    "seed"
+  ],
+  "main": "things-i18n-msg.html",
+  "license": "http://polymer.github.io/LICENSE.txt",
+  "homepage": "https://github.com/ThingsElements/things-i18n-msg/",
+  "ignore": [
+    "/.*",
+    "/test/"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.2.0",
+    "things-global-behavior": "ThingsElements/things-global-behavior#^0.0.3"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "web-component-tester": "^4.0.0",
+    "iron-demo-helpers": "^1.2.3"
+  }
+}
