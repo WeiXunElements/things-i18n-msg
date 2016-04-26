@@ -19,7 +19,7 @@
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#^1.2.0",
-    "things-global-behavior": "ThingsElements/things-global-behavior#^0.0.3"
+    "things-global-behavior": "ThingsElements/things-global-behavior#latest"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
