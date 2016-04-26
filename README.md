@@ -31,31 +31,63 @@ Once running, you can preview your element at
 `http://localhost:8080/components/things-i18n-msg/`, where `things-i18n-msg` is the name of the directory containing it.
 
 
-## Testing Your Element
+### 설정
+동 i18n은 i18n-msg을 Things Framework에 맞게 수정하여 서버 및 local로 부터 언어 데이타를 받아서 
+화면에 넣어 주는 형태로 되어 있다. 
 
-Simply navigate to the `/test` directory of your element to run its tests. If
-you are using Polyserve: `http://localhost:8080/components/things-i18n-msg/test/`
+main page 혹은 things-setting으로 dataGlobals에 Base Url 및 locale을 수정하여 notifyPath를 해 준다.:
 
-### web-component-tester
+    window.addEventListener('WebComponentsReady', function() {
+      _thingsGlobalBehaviorInstances[0].set('globals.baseUrl', 'http://localhost:8080/components/things-i18n-msg/demo');
+      _thingsGlobalBehaviorInstances[0].set('globals.locale', 'en');
+    });
 
-The tests are compatible with [web-component-tester](https://github.com/Polymer/web-component-tester).
-Install it via:
+### 데이타 격식 및 Path
 
-    npm install -g web-component-tester
+<b> 격식 :</b>
+{
+  "locale" : {
+    key:value
+  }
+}
+  <b>Example</b>
+  {
+    "ko-KR":{
+      "days": "일",
+      "hours": "시간",
+      "minutes": "분"
+    }
+  }
 
-Then, you can run your tests on _all_ of your local browsers via:
+<b> Path :</b> 
+Local에 Message.Json파일이 있을 경우 root/terminologies/resource아래데 {{locale}}.json형태로 저장되어 있어야 한다.
 
-    wct
+<b>Example</b> - 전체 `<things-i18n-msg>` instances에 URL경로 변경을 알리며 데아타를 Refresh한다.:
 
-#### WCT Tips
+    _thingsGlobalBehaviorInstances[0].set('globals.baseUrl', 'http://localhost:8080/components/things-i18n-msg/demo');
 
-`wct -l chrome` will only run tests in chrome.
+<b>Example</b> - 특수한 테그에서 해당 태그에만의 locale파일 위치를 지정할 수 있다.:
 
-`wct -p` will keep the browsers alive after test runs (refresh to re-run).
+    <i18n-msg messages-url="path/to/locales">fallback text</i18n-msg>
 
-`wct test/some-file.html` will test only the files you specify.
+<b>Note:</b> 하지만 동일한 locale에 대하여서는 데이타를 한번만 받아 온다.<things-i18n-msg>`.
 
+### Fallback text
 
-## Yeoman support
+만일 msgid를 key로 검색한 결과가 없으면 "fallback text"를 그대로 둔다.
 
-If you'd like to use Yeoman to scaffold your element that's possible. The official [`generator-polymer`](https://github.com/yeoman/generator-polymer) generator has a [`seed`](https://github.com/yeoman/generator-polymer#seed) subgenerator.
+    <i18n-msg msgid="unknownmsgid">fallback text</i18n-msg>
+### With Data Binding
+    <template is="dom-bind">
+        <things-i18n-msg msgid="days" msg="{{days}}"></things-i18n-msg>
+        <p>Example of updating an attribute:
+            <input id="input" placeholder="[[days]]">
+        </p>
+    </template>
+### Example of updating an attribute with getMsg() method:
+    <input id="input" placeholder="Days">
+    <script>
+      var el = document.createElement('things-i18n-msg');
+      el.msgid = 'minutes';
+      document.querySelector('#dynamic').appendChild(el);
+    </script>
