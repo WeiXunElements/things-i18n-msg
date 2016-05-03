@@ -56,8 +56,8 @@ Things.I18nMsgBehaviorImpl = {
    */
   _msgidChanged: function(newMsgid, oldMsgid) {
     if(newMsgid != oldMsgid) {
-      this.msg = this.i18nTranslate(newMsgid);
-      this.innerHTML = this.msg;
+      this.msg = this.i18nTranslate(newMsgid)||this.innerHTML;
+      this.innerHTML = this.msg||this.innerHTML;
     }
   }
 };
