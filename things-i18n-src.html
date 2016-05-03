@@ -7,7 +7,7 @@ A comment describing this element
 Example:
 
 		<things-i18n-src host ="http://localhost/" src-url = "terminologies"></things-i18n-src>
-		
+
 		<things-i18n-src src-url = "terminologies"></things-i18n-src>
 -->
 <dom-module id="things-i18n-src">
@@ -56,6 +56,7 @@ Example:
          * @param {Object} user
          */
         initializeSettings: function(baseUrl, srcUrl, locale, user) {
+        	Things.DataGlobal.locales={}||Things.DataGlobal.locales;
             if (!Things.DataGlobal.fetchedLang) {
                 this._initializeI18n(baseUrl, srcUrl, locale, user);
 
