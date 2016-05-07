@@ -1,6 +1,6 @@
 {
   "name": "things-i18n-msg",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "authors": [
     "Hatio Lab. <heartyoh@hatiolab.com>"
   ],
@@ -10,7 +10,7 @@
     "polymer",
     "seed"
   ],
-  "main": "things-i18n-msg.html",
+  "main": "elements.html",
   "license": "http://polymer.github.io/LICENSE.txt",
   "homepage": "https://github.com/ThingsElements/things-i18n-msg/",
   "ignore": [
@@ -25,5 +25,14 @@
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
     "web-component-tester": "^4.0.0",
     "iron-demo-helpers": "^1.2.3"
-  }
+  },
+  "_release": "0.1.2",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.1.2",
+    "commit": "eb0e165ad71e452aa308f684fa67f17bd0ce4fbc"
+  },
+  "_source": "git://github.com/ThingsElements/things-i18n-msg.git",
+  "_target": "*",
+  "_originalSource": "ThingsElements/things-i18n-msg"
 }
