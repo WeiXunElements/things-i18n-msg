@@ -19,20 +19,12 @@
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#^1.2.0",
-    "things-global-behavior": "ThingsElements/things-global-behavior"
+    "things-global-behavior": "ThingsElements/things-global-behavior",
+    "things-msg-box-behavior": "ThingsElements/things-msg-box-behavior"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
     "web-component-tester": "^4.0.0",
     "iron-demo-helpers": "^1.2.3"
-  },
-  "_release": "0.1.2",
-  "_resolution": {
-    "type": "version",
-    "tag": "0.1.2",
-    "commit": "eb0e165ad71e452aa308f684fa67f17bd0ce4fbc"
-  },
-  "_source": "git://github.com/ThingsElements/things-i18n-msg.git",
-  "_target": "*",
-  "_originalSource": "ThingsElements/things-i18n-msg"
+  }
 }
