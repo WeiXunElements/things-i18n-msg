@@ -27,8 +27,10 @@ Things.I18nTranslateBehavior = {
    * @return {string|null} a message in the current locale. Translated message or `null` if not found, 
    */
   i18nTranslate: function(msgId, dataSet) {
+    Things.DataGlobal.locale?null:Things.DataGlobal.locale='en-US';
+
     if(!msgId || !Things.DataGlobal || !Things.DataGlobal.locales || !Things.DataGlobal.locale) {
-      return null;
+      return msgId;
     }
 
     var langSet = Things.DataGlobal.locales[Things.DataGlobal.locale];
