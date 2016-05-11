@@ -41,7 +41,7 @@ Things.I18nMsgBehaviorImpl = {
     }
   },
 
-  attached: function() {
+  ready: function() {
     if(this.auto) {
       document.addEventListener('things-i18n-ready', function() {
         var msgId = this.msgid;
