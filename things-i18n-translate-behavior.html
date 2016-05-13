@@ -30,7 +30,7 @@ Things.I18nTranslateBehavior = {
     Things.DataGlobal.locale?null:Things.DataGlobal.locale='en-US';
 
     if(!msgId || !Things.DataGlobal || !Things.DataGlobal.locales || !Things.DataGlobal.locale) {
-      return msgId;
+      return this.innerHTML||msgId;
     }
 
     var langSet = Things.DataGlobal.locales[Things.DataGlobal.locale];
@@ -53,7 +53,7 @@ Things.I18nTranslateBehavior = {
       var warnMsg = this.localName ? this.localName + ': msgid (' : '(';
       warnMsg += msgId + ') was not found!'
       console.warn(warnMsg);
-      return msgId;
+      return this.innerHTML||msgId;
     }
   }
 
