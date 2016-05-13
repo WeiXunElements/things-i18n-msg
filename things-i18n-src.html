@@ -1,6 +1,7 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../things-msg-box-behavior/things-msg-box-behavior.html">
 <link rel="import" href="../things-global-behavior/things-global-behavior.html">
+<link rel="import" href="../things-i18n-msg/things-i18n-msg-behavior.html">
 <!--
 A comment describing this element
 
@@ -16,7 +17,8 @@ Example:
         is: 'things-i18n-src',
         behaviors: [
           Things.GlobalBehavior,
-          Things.MsgBoxBehavior
+          Things.MsgBoxBehavior,
+          Things.I18nMsgBehavior
         ],
         properties: {
         	/**
