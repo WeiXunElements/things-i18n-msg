@@ -12,7 +12,14 @@ Things.I18nTranslateBehavior = {
   ready: function() {
     if(!Things.DataGlobal.t) {
       Things.DataGlobal.t = this.i18nTranslate;
+      Things.DataGlobal.tt = this.i18nT;
     }
+  },
+
+  i18nT: function(msgId) {
+    // TODO 추후 Setting이나 글로벌 변수로 동적 화면의 용어를 클라이언트에서 변환할 지 여부를 판단하여 
+    // translate 해주거나 안 하거나 결정. 현재는 서버에서 변환하여 전달 
+    return msgId;
   },
   
   /**
