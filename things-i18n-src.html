@@ -37,6 +37,22 @@ Example:
                 value: 'terminologies/resource'
             },
         },
+
+        observers: [
+            'updateGlobals(globals.locale, globals.user)'
+        ],
+
+        updateGlobals: function() {
+            if ((this.host||this.globals.baseUrl) 
+                && this.srcUrl && this.globals.locale && this.globals.user){
+                var host = this.host||this.globals.baseUrl;
+                this.initializeSettings(host, 
+                                        this.srcUrl, 
+                                        this.globals.locale, 
+                                        this.globals.user)
+            }
+        },
+
         ready: function() {
             this.globals.locale = this.globals.locale || 'en-US';
 
