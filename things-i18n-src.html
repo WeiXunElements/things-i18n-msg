@@ -44,7 +44,7 @@ Example:
 
         updateGlobals: function() {
             if ((this.host||this.globals.baseUrl) 
-                && this.srcUrl && this.globals.locale && this.globals.user){
+                && this.srcUrl && this.globals.locale){
                 var host = this.host||this.globals.baseUrl;
                 this.initializeSettings(host, 
                                         this.srcUrl, 
@@ -57,7 +57,7 @@ Example:
             this.globals.locale = this.globals.locale || 'en-US';
 
             if ((this.host||this.globals.baseUrl) 
-            	&& this.srcUrl && this.globals.locale && this.globals.user){
+            	&& this.srcUrl && this.globals.locale){
             	var host = this.host||this.globals.baseUrl;
                 this.initializeSettings(host, 
                 						this.srcUrl, 
