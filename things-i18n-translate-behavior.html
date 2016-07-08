@@ -41,7 +41,9 @@ Things.I18nTranslateBehavior = {
     }
 
     var langSet = Things.DataGlobal.locales[Things.DataGlobal.locale];
-    var message = langSet[msgId];
+    if (langSet) {
+      var message = langSet[msgId];
+    }
 
     if (langSet && message) {
       if(!dataSet) {
