@@ -43,12 +43,12 @@ Example:
         ],
 
         updateGlobals: function() {
-            if ((this.host||this.globals.baseUrl) 
+            if ((this.host||this.globals.baseUrl)
                 && this.srcUrl && this.globals.locale){
                 var host = this.host||this.globals.baseUrl;
-                this.initializeSettings(host, 
-                                        this.srcUrl, 
-                                        this.globals.locale, 
+                this.initializeSettings(host,
+                                        this.srcUrl,
+                                        this.globals.locale,
                                         this.globals.user)
             }
         },
@@ -56,12 +56,12 @@ Example:
         ready: function() {
             this.globals.locale = this.globals.locale || 'en-US';
 
-            if ((this.host||this.globals.baseUrl) 
+            if ((this.host||this.globals.baseUrl)
             	&& this.srcUrl && this.globals.locale){
             	var host = this.host||this.globals.baseUrl;
-                this.initializeSettings(host, 
-                						this.srcUrl, 
-                						this.globals.locale, 
+                this.initializeSettings(host,
+                						this.srcUrl,
+                						this.globals.locale,
                 						this.globals.user)
             }
         },
@@ -74,7 +74,7 @@ Example:
          * @param {Object} user
          */
         initializeSettings: function(baseUrl, srcUrl, locale, user) {
-        	Things.DataGlobal.locales={}||Things.DataGlobal.locales;
+            Things.DataGlobal.locales=Things.DataGlobal.locales||{};
             if (!Things.DataGlobal.fetchedLang) {
                 this._initializeI18n(baseUrl, srcUrl, locale, user);
 
