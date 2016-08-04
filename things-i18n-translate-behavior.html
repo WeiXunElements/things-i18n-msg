@@ -17,32 +17,35 @@ Things.I18nTranslateBehavior = {
   },
 
   i18nT: function(msgId) {
-    // TODO 추후 Setting이나 글로벌 변수로 동적 화면의 용어를 클라이언트에서 변환할 지 여부를 판단하여 
-    // translate 해주거나 안 하거나 결정. 현재는 서버에서 변환하여 전달 
+    // TODO 추후 Setting이나 글로벌 변수로 동적 화면의 용어를 클라이언트에서 변환할 지 여부를 판단하여
+    // translate 해주거나 안 하거나 결정. 현재는 서버에서 변환하여 전달
     return msgId;
   },
-  
+
   /**
    * i18n Language Set에서 메시지 아이디로 메시지를 찾는다.
    *
    * @param {string=} msgId Optional message id to lookup. If left off,
    * the instance's `msgid` property is used.
-   * 
-   * @param {Object=} dataSet 검색하는 Message중에서 대체해야하는 변수를 key:Value 형태로 
+   *
+   * @param {Object=} dataSet 검색하는 Message중에서 대체해야하는 변수를 key:Value 형태로
    * 전송하여 msg내 해당 되는 Key와 같은 변수가 있으면 replace 없으면 아무작업하지 않음.
-   * 
-   * @return {string|null} a message in the current locale. Translated message or `null` if not found, 
+   *
+   * @return {string|null} a message in the current locale. Translated message or `null` if not found,
    */
   i18nTranslate: function(msgId, dataSet) {
-    Things.DataGlobal.locale ? null : Things.DataGlobal.locale = 'en-US';
+    // Things.DataGlobal.locale ? null : Things.DataGlobal.locale = 'en-US';
 
     if(!msgId || !Things.DataGlobal || !Things.DataGlobal.locales || !Things.DataGlobal.locale) {
       return this.innerHTML || msgId;
     }
 
     var langSet = Things.DataGlobal.locales[Things.DataGlobal.locale];
-    if (langSet) {
-      var message = langSet[msgId];
+    var message = {};
+    if(!langSet){
+      return this.innerHTML || msgId;
+    }else{
+      message = langSet[msgId];
     }
 
     if (langSet && message) {
