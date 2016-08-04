@@ -15,7 +15,7 @@ Example:
   <script>
     Polymer({
       is: 'things-i18n-src',
-      
+
       behaviors: [
         Things.GlobalBehavior,
         Things.MsgBoxBehavior,
@@ -59,7 +59,7 @@ Example:
        * Lifecycle - Ready
        */
       ready: function() {
-        this.globals.locale = this.globals.locale || 'en-US';
+        // this.globals.locale = this.globals.locale || 'en-US';
 
         if ((this.host || this.globals.baseUrl) && this.srcUrl && this.globals.locale) {
           var host = this.host || this.globals.baseUrl;
@@ -80,9 +80,9 @@ Example:
 
         if (!Things.DataGlobal.fetchedLang) {
           this._initializeI18n(baseUrl, srcUrl, locale, user);
-
-        } else if (Things.DataGlobal.fetchedLang == 'completed') {
-          return;
+        } else if (Things.DataGlobal.fetchedLang == 'completed'&&Things.DataGlobal.locales[locale]) {
+          var event = new CustomEvent('things-i18n-ready', { language: locale });
+          document.dispatchEvent(event);
 
         } else if (Things.DataGlobal.fetchedLang != 'loading') {
           if (!Things.DataGlobal.locales[locale]) {
@@ -122,7 +122,7 @@ Example:
 
           } else {
             var resp = JSON.parse(e.target.response)[locale];
-            if (!Things.DataGlobal.locales) 
+            if (!Things.DataGlobal.locales)
               Things.DataGlobal.locales = {};
 
             Things.DataGlobal.locales[locale] = resp;
