@@ -65,6 +65,7 @@ Things.I18nTranslateBehavior = {
       var warnMsg = this.localName ? this.localName + ': msgid (' : '(';
       warnMsg += msgId + ') was not found!'
       console.warn(warnMsg);
+      langSet[msgId] = msgId
       return this.innerHTML||msgId;
     }
   }
