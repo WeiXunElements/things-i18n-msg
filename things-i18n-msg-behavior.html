@@ -62,7 +62,6 @@ Things.I18nMsgBehaviorImpl = {
    */
   _msgidChanged: function(newMsgid, oldMsgid) {
     if(newMsgid != oldMsgid) {
-      console.log(this.dataSet);
       this.msg = this.i18nTranslate(newMsgid,this.dataSet);
       this.innerHTML = this.msg
     }
