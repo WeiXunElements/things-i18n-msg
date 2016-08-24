@@ -27,6 +27,7 @@ Things.I18nMsgBehaviorImpl = {
      */
     dataSet:{
       type: Object,
+      observer: '_dataSetChanged'
     },
 
     /**
@@ -61,9 +62,17 @@ Things.I18nMsgBehaviorImpl = {
    */
   _msgidChanged: function(newMsgid, oldMsgid) {
     if(newMsgid != oldMsgid) {
+      console.log(this.dataSet);
       this.msg = this.i18nTranslate(newMsgid,this.dataSet);
       this.innerHTML = this.msg
     }
+  },
+  /**
+   * msgid가 바뀌면 메시지 변경
+   */
+  _dataSetChanged: function(dataSet) {
+      this.msg = this.i18nTranslate(this.msgid,this.dataSet);
+      this.innerHTML = this.msg
   }
 };
 
