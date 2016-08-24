@@ -22,6 +22,12 @@ Things.I18nMsgBehaviorImpl = {
       type: String,
       observer: '_msgidChanged'
     },
+    /**
+     * 메시지 치환 정보
+     */
+    dataSet:{
+      type: Object,
+    },
 
     /**
      * 메시지 
@@ -30,7 +36,6 @@ Things.I18nMsgBehaviorImpl = {
       type: String,
       notify: true
     },
-
     /**
      * i18n 데이터 셋의 변경을 자동으로 반영할 것인지 여
      */
@@ -56,7 +61,7 @@ Things.I18nMsgBehaviorImpl = {
    */
   _msgidChanged: function(newMsgid, oldMsgid) {
     if(newMsgid != oldMsgid) {
-      this.msg = this.i18nTranslate(newMsgid);
+      this.msg = this.i18nTranslate(newMsgid,this.dataSet);
       this.innerHTML = this.msg
     }
   }
