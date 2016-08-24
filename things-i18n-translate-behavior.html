@@ -54,7 +54,7 @@ Things.I18nTranslateBehavior = {
 
       } else {
         Object.keys(dataSet).forEach(function(data) {
-          var bracedData = '{' + data.replace(/\$/, '\\$') + '}';
+          var bracedData = '\\'+'{' + data.replace(/\$/, '\\$') + '\\'+'}';
           var regEx = new RegExp(bracedData, "gi");
           message = message.replace(regEx, dataSet[data]);
         });
