@@ -1,6 +1,8 @@
 <script>
 
 window.Things = window.Things || {};
+// dataGlobal이 늦게 추가 될 수 있어서 없을 경우 초기화
+window.Things.DataGlobal = window.Things.DataGlobal||{};
 
 /**
  * I18n 기본 메시지 Behavior. msgid로 부터 메시지를 translate한다.
