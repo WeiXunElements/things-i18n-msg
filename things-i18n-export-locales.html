@@ -5,7 +5,11 @@
 <dom-module id="things-i18n-export-locales">
     <template>
         <style>
-        :host {}
+          paper-icon-button {
+            @apply(--things-small-icon);
+            float:right;
+            margin-top:1px;margin-right:22px;
+          }
         </style>
         <template is="dom-if" if={{isDevelopMode()}}>
             <things-i18n-msg msgid="button.export-locale-file" msg="{{labelExportLocale}}" auto hidden>export locale file</things-i18n-msg>
