@@ -21,6 +21,7 @@
     "polymer": "Polymer/polymer#^1.2.0",
     "things-global-behavior": "ThingsElements/things-global-behavior",
     "things-msg-box-behavior": "ThingsElements/things-msg-box-behavior"
+    "paper-icon-button": "^1.0.7"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
