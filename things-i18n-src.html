@@ -8,7 +8,7 @@
 
 Example:
 
-		<things-i18n-src></things-i18n-src>
+    <things-i18n-src></things-i18n-src>
 -->
 
 <dom-module id="things-i18n-src">
@@ -25,11 +25,10 @@ Example:
       properties: {
         /**
          * host가 있으면 host를 사용하고 없으면 globals.baseUrl을 사용한다.
-         * @type {Object}
+         * @type {String}
          */
         host: {
-          type: String,
-          value: ''
+          type: String
         },
 
         /**
@@ -46,9 +45,9 @@ Example:
       ],
 
       /**
-       * 글로벌 변수 변경시 ...
+       * Lifecycle - Ready
        */
-      onChangeGlobalProps: function() {
+      ready: function() {
         if ((this.host || this.globals.baseUrl) && this.srcUrl && this.globals.locale) {
           var host = this.host || this.globals.baseUrl;
           this.initializeSettings(host, this.srcUrl, this.globals.locale, this.globals.user);
@@ -56,14 +55,15 @@ Example:
       },
 
       /**
-       * Lifecycle - Ready
+       * 글로벌 변수 변경시 ...
+       *
+       * @param {String} baseUrl
+       * @param {String} locale
        */
-      ready: function() {
-        // this.globals.locale = this.globals.locale || 'en-US';
-
-        if ((this.host || this.globals.baseUrl) && this.srcUrl && this.globals.locale) {
-          var host = this.host || this.globals.baseUrl;
-          this.initializeSettings(host, this.srcUrl, this.globals.locale, this.globals.user);
+      onChangeGlobalProps: function(baseUrl, locale) {
+        if ((this.host || baseUrl) && this.srcUrl && locale) {
+          var host = this.host || baseUrl;
+          this.initializeSettings(host, this.srcUrl, locale, this.globals.user);
         }
       },
 
@@ -80,7 +80,8 @@ Example:
 
         if (!Things.DataGlobal.fetchedLang) {
           this._initializeI18n(baseUrl, srcUrl, locale, user);
-        } else if (Things.DataGlobal.fetchedLang == 'completed'&&Things.DataGlobal.locales[locale]) {
+
+        } else if (Things.DataGlobal.fetchedLang == 'completed' && Things.DataGlobal.locales[locale]) {
           var event = new CustomEvent('things-i18n-ready', { language: locale });
           document.dispatchEvent(event);
 
@@ -111,7 +112,7 @@ Example:
         var url = [baseUrl, srcUrl, locale].join('/') + '.json';
         var xhr = new XMLHttpRequest();
         xhr.open('GET', url, true);
-        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.setRequestHeader('Content-type', 'application/json');
         xhr.withCredentials = true;
 
         // 2. add response event
@@ -122,8 +123,9 @@ Example:
 
           } else {
             var resp = JSON.parse(e.target.response)[locale];
-            if (!Things.DataGlobal.locales)
+            if (!Things.DataGlobal.locales) {
               Things.DataGlobal.locales = {};
+            }
 
             Things.DataGlobal.locales[locale] = resp;
             Things.DataGlobal.fetchedLang = 'completed';

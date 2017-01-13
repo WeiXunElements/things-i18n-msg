@@ -44,9 +44,10 @@ Things.I18nTranslateBehavior = {
 
     var langSet = Things.DataGlobal.locales[Things.DataGlobal.locale];
     var message = {};
-    if(!langSet){
+
+    if(!langSet) {
       return this.innerHTML || msgId;
-    }else{
+    } else {
       message = langSet[msgId];
     }
 
@@ -63,15 +64,15 @@ Things.I18nTranslateBehavior = {
 
         return message;
       }
+
     } else {
       var warnMsg = this.localName ? this.localName + ': msgid (' : '(';
       warnMsg += msgId + ') was not found!'
       console.warn(warnMsg);
       langSet[msgId] = msgId
-      return this.innerHTML||msgId;
+      return this.innerHTML || msgId;
     }
   }
-
 };
 
 </script>

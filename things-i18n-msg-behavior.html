@@ -22,6 +22,7 @@ Things.I18nMsgBehaviorImpl = {
       type: String,
       observer: '_msgidChanged'
     },
+
     /**
      * 메시지 치환 정보
      */
@@ -37,16 +38,19 @@ Things.I18nMsgBehaviorImpl = {
       type: String,
       notify: true
     },
+
     /**
      * i18n 데이터 셋의 변경을 자동으로 반영할 것인지 여
      */
     auto: {
       type: Boolean,
-      value: false,
-
+      value: false
     }
   },
 
+  /**
+   * LifeCycle - Ready
+   */
   ready: function() {
     if(this.auto) {
       document.addEventListener('things-i18n-ready', function() {
@@ -59,19 +63,25 @@ Things.I18nMsgBehaviorImpl = {
 
   /**
    * msgid가 바뀌면 메시지 변경
+   *
+   * @param {String} newMsgid
+   * @param {String} oldMsgid
    */
   _msgidChanged: function(newMsgid, oldMsgid) {
     if(newMsgid != oldMsgid) {
-      this.msg = this.i18nTranslate(newMsgid,this.dataSet);
+      this.msg = this.i18nTranslate(newMsgid, this.dataSet);
       this.innerHTML = this.msg
     }
   },
+
   /**
    * msgid가 바뀌면 메시지 변경
+   *
+   * @param {String} newMsgid
    */
   _dataSetChanged: function(dataSet) {
-      this.msg = this.i18nTranslate(this.msgid,this.dataSet);
-      this.innerHTML = this.msg
+    this.msg = this.i18nTranslate(this.msgid, this.dataSet);
+    this.innerHTML = this.msg
   }
 };
 
