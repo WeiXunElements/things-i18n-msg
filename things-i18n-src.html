@@ -38,6 +38,9 @@ Example:
         srcUrl: {
           type: String,
           value: 'terminologies/resource'
+        },
+        locale:{
+          observer:'onlocaleChange'
         }
       },
 
@@ -54,7 +57,9 @@ Example:
           this.initializeSettings(host, this.srcUrl, this.globals.locale, this.globals.user);
         }
       },
-
+      onlocaleChange: function(locale){
+        this.set('globals.locale',locale);
+      },
       /**
        * 글로벌 변수 변경시 ...
        *

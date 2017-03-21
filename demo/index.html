@@ -6,77 +6,82 @@
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
     <title>i18n-msg element Demo</title>
     <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <link rel="import" href="../things-i18n-src.html">
     <link rel="import" href="../things-i18n-msg.html">
     <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
     <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+    <link rel="import" href="../../things-global-behavior/things-global-behavior.html">
+
 </head>
 
 <body>
     <p class="paper-font-subhead">Things i18n </p>
     <demo-snippet class="centered-demo">
-        <template id="app">
-            <select id="selector">
-                <option selected>en</option>
-                <option>es</option>
-                <option>fr</option>
-                <option>pt-br</option>
-                <option>ko-KR</option>
-            </select>
-            <p>"Days" in selected language is:
-                <b><things-i18n-msg id="daysMsgEl" msgid="days">PLACEHOLDER_STRING</things-i18n-msg></b> !
-            </p>
-            <p>"Hours" in selected language is:
-                <b><things-i18n-msg msgid="hours">PLACEHOLDER_STRING</things-i18n-msg></b> !
-            </p>
-            <p>"Minutes" in selected language is:
-                <b><things-i18n-msg msgid="minutes">PLACEHOLDER_STRING</things-i18n-msg></b> !
-            </p>
-            <p>Example fallback text when a message id isn't found:
-                <b><things-i18n-msg msgid="UNKNOWN_MSG_ID">UNKNOWN_MSG_ID</things-i18n-msg></b>
-            </p>
-            <p>Example of updating an attribute with getMsg() method:
-                <input id="input" placeholder="Days">
-            </p>
-            <template is="dom-bind">
-                <things-i18n-msg msgid="days" msg="{{days}}"></things-i18n-msg>
-                <p>Example of updating an attribute:
-                    <input id="input" placeholder="[[days]]">
-                </p>
+        <template>
+          <dom-module id="locale-selector">
+            <template>
+              <style>
+                :host {
+                  display: block;
+                }
+              </style>
+              <select id="selector">
+                  <option selected>en</option>
+                  <option>es</option>
+                  <option>fr</option>
+                  <option>pt-br</option>
+                  <option>ko-KR</option>
+              </select>
             </template>
-            <p>Example of dynamically created element:
-                <span id="dynamic"></span>
-            </p>
-          
-          <script>
-          var app = document.querySelector('#app');
-          var selector = document.querySelector('#selector');
-          var input = document.querySelector('#input');
-
-          window.addEventListener('WebComponentsReady', function() {
-              if (_thingsGlobalBehaviorInstances.length > 0){
-                _thingsGlobalBehaviorInstances[0].set('globals.baseUrl', 'http://localhost:8080/components/things-i18n-msg/demo');
-                _thingsGlobalBehaviorInstances[0].set('globals.locale', 'en');
-              }
-                  
-          });
-
-          selector.addEventListener('change', function() {
-              document.documentElement.lang = this.value;
-              if (_thingsGlobalBehaviorInstances.length > 0)
-                  _thingsGlobalBehaviorInstances[0].set('globals.locale', this.value);
-          });
-
-          document.addEventListener('i18n-language-ready', function(e) {
-             console.log('i18n-language-ready');
-              var daysMsgEl = document.querySelector('#daysMsgEl');
-              input.placeholder = daysMsgEl.getMsg(daysMsgEl.msgid);
-              document.querySelector('#dynamic').innerHTML = '';
-
-              var el = document.createElement('things-i18n-msg');
-              el.msgid = 'minutes';
-              document.querySelector('#dynamic').appendChild(el);
-          });
-          </script>
+            <script>
+              Polymer({
+                is: 'locale-selector',
+                properties:{
+                  locale:{
+                    type: String,
+                    notify:true,
+                    value: 'en'
+                  }
+                },
+                // behaviors: [ Things.GlobalBehavior ],
+                ready: function(){
+                  var self = this;
+                  this.$.selector.addEventListener('change', function(event) {
+                      // this.set('globals.baseurl', 'http://localhost:8080');
+                      self.set('locale', event.target.value);
+                  });
+                }
+              });
+            </script>
+          </dom-module>
+          <template is="dom-bind">
+            <locale-selector locale="{{locale}}"></locale-selector>
+            <things-i18n-src host="http://localhost:8080/components/things-i18n-msg/demo" locale$="[[locale]]"></things-i18n-src>
+              <p>"Days" in selected language is:
+                  <b><things-i18n-msg id="daysMsgEl" msgid="days">PLACEHOLDER_STRING</things-i18n-msg></b> !
+              </p>
+              <p>"Hours" in selected language is:
+                  <b><things-i18n-msg msgid="hours">PLACEHOLDER_STRING</things-i18n-msg></b> !
+              </p>
+              <p>"Minutes" in selected language is:
+                  <b><things-i18n-msg msgid="minutes">PLACEHOLDER_STRING</things-i18n-msg></b> !
+              </p>
+              <p>Example fallback text when a message id isn't found:
+                  <b><things-i18n-msg msgid="UNKNOWN_MSG_ID">UNKNOWN_MSG_ID</things-i18n-msg></b>
+              </p>
+              <p>Example of updating an attribute with getMsg() method:
+                  <input id="input" placeholder="Days">
+              </p>
+              <template is="dom-bind">
+                  <things-i18n-msg msgid="days" msg="{{days}}"></things-i18n-msg>
+                  <p>Example of updating an attribute:
+                      <input id="input" placeholder="[[days]]">
+                  </p>
+              </template>
+              <p>Example of dynamically created element:
+                  <span id="dynamic"></span>
+              </p>
+          </template>
       </template>
 
     </demo-snippet>

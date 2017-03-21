@@ -4,7 +4,7 @@
   "authors": [
     "Hatio Lab. <heartyoh@hatiolab.com>"
   ],
-  "description": "An element to get i18n data with element tag.",
+  "description": "element 태그로 i18n 데이터를 가져오는 element / An element to get i18n data with element tag.",
   "keywords": [
     "web-component",
     "polymer",
