@@ -18,72 +18,93 @@
     <p class="paper-font-subhead">Things i18n </p>
     <demo-snippet class="centered-demo">
         <template>
-          <dom-module id="locale-selector">
-            <template>
-              <style>
-                :host {
-                  display: block;
-                }
-              </style>
-              <select id="selector">
-                  <option selected>en</option>
-                  <option>es</option>
-                  <option>fr</option>
-                  <option>pt-br</option>
-                  <option>ko-KR</option>
-              </select>
-            </template>
-            <script>
-              Polymer({
-                is: 'locale-selector',
-                properties:{
-                  locale:{
-                    type: String,
-                    notify:true,
-                    value: 'en'
+            <!--Locale Constroller-->
+            <dom-module id="locale-selector">
+              <template>
+                <style>
+                  :host {
+                    display: block;
                   }
-                },
-                // behaviors: [ Things.GlobalBehavior ],
-                ready: function(){
-                  var self = this;
-                  this.$.selector.addEventListener('change', function(event) {
-                      // this.set('globals.baseurl', 'http://localhost:8080');
-                      self.set('locale', event.target.value);
-                  });
-                }
-              });
-            </script>
-          </dom-module>
-          <template is="dom-bind">
-            <locale-selector locale="{{locale}}"></locale-selector>
-            <things-i18n-src host="http://localhost:8080/components/things-i18n-msg/demo" locale$="[[locale]]"></things-i18n-src>
-              <p>"Days" in selected language is:
-                  <b><things-i18n-msg id="daysMsgEl" msgid="days">PLACEHOLDER_STRING</things-i18n-msg></b> !
-              </p>
-              <p>"Hours" in selected language is:
-                  <b><things-i18n-msg msgid="hours">PLACEHOLDER_STRING</things-i18n-msg></b> !
-              </p>
-              <p>"Minutes" in selected language is:
-                  <b><things-i18n-msg msgid="minutes">PLACEHOLDER_STRING</things-i18n-msg></b> !
-              </p>
-              <p>Example fallback text when a message id isn't found:
-                  <b><things-i18n-msg msgid="UNKNOWN_MSG_ID">UNKNOWN_MSG_ID</things-i18n-msg></b>
-              </p>
-              <p>Example of updating an attribute with getMsg() method:
-                  <input id="input" placeholder="Days">
-              </p>
-              <template is="dom-bind">
-                  <things-i18n-msg msgid="days" msg="{{days}}"></things-i18n-msg>
-                  <p>Example of updating an attribute:
-                      <input id="input" placeholder="[[days]]">
-                  </p>
+                </style>
+                <select id="selector">
+                    <option selected>en</option>
+                    <option>es</option>
+                    <option>fr</option>
+                    <option>pt-br</option>
+                    <option>ko-KR</option>
+                </select>
               </template>
-              <p>Example of dynamically created element:
-                  <span id="dynamic"></span>
+              <script>
+                Polymer({
+                  is: 'locale-selector',
+                  properties:{
+                    locale:{
+                      type: String,
+                      notify:true,
+                      value: 'en'
+                    }
+                  },
+                  behaviors: [
+                    Things.GlobalBehavior
+                  ],
+                  ready: function(){
+                    var self = this;
+                    self.set('globals.baseUrl', 'http://localhost:8080/components/things-i18n-msg/demo');
+                    self.set('globals.locale', this.$.selector.value);
+                    
+                    this.$.selector.addEventListener('change', function(event) {
+                        self.set('globals.locale', event.target.value);
+                        self.set('locale', event.target.value);
+                    });
+                  }
+                });
+              </script>
+            </dom-module>
+          </template>
+    </demo-snippet>
+
+    <demo-snippet class="centered-demo">
+        <template>
+          <template is="dom-bind">
+            <!--  auto  locale value-->
+            <locale-selector></locale-selector>
+            <things-i18n-src host="http://localhost:8080/components/things-i18n-msg/demo"></things-i18n-src>
+              <p>"Days"선택된 언어에서의 표현은:
+                  <b><things-i18n-msg auto msgid="days"></things-i18n-msg></b> !
               </p>
           </template>
       </template>
+    </demo-snippet>
 
+    <demo-snippet class="centered-demo">
+        <template>
+          <template is="dom-bind">
+            <!-- -->
+            <locale-selector></locale-selector>
+            <things-i18n-src host="http://localhost:8080/components/things-i18n-msg/demo"></things-i18n-src>
+            <things-i18n-msg auto
+                msgid="days"
+                msg="{{label_days}}"
+                hidden></things-i18n-msg>
+            <p> Databind를 사용하여 "Days"가 선택된 언어에서의 표현을 보여주면: [[label_days]]</p>
+          </template>
+
+      </template>
+    </demo-snippet>
+
+    <demo-snippet class="centered-demo">
+        <template>
+          <template is="dom-bind">
+              <!--  locale binding-->
+              <locale-selector></locale-selector>
+              <things-i18n-src host="http://localhost:8080/components/things-i18n-msg/demo"></things-i18n-src>
+              <things-i18n-msg auto
+                  msgid="msg"
+                  data-set='{"1":"전략사업","2":"홍길동"}'>
+                  부서 {1}의 {2}님이 오신걸 환영헙니다.
+              </things-i18n-msg>
+          </template>
+      </template>
     </demo-snippet>
 </body>
 

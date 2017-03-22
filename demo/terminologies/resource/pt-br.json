@@ -2,6 +2,7 @@
   "pt-br":{
     "days": "Dias",
     "hours": "Horas",
-    "minutes": "Minutos"
+    "minutes": "Minutos",
+    "msg": "pt: {1}'s Mr.'{2}"
   }
 }

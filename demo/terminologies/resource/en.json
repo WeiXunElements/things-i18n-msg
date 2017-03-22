@@ -2,6 +2,7 @@
   "en":{
     "days": "days",
     "hours": "hours",
-    "minutes": "minutes"
+    "minutes": "minutes",
+    "msg": "Welcome Department:{1}'s Mr.{2}"
   }
 }

@@ -5,9 +5,9 @@
 window.Things = window.Things || {}; //다국어도 global에서 관리
 
 /**
- * I18n 메시지 Behavior. Things.I18nTranslateBehavior를 확장한 Behavior
- * auto를 true로 설정하면 i18n DataSet이 변경될 때 마다 이벤트를 받아 값을 갱신한다.
- * auto 모드일 경우 이벤트를 Listen하고 있어야 하므로 이에 따른 오버헤드도 생각해야 한다.
+ ### I18n 메시지 Behavior. Things.I18nTranslateBehavior를 확장한 Behavior
+
+ * * ** auto를 true로 설정하면 i18n DataSet이 변경될 때 마다 이벤트를 받아 값을 갱신한다.**
  *
  * @polymerBehavior Things.I18nMsgBehavior
  */
@@ -25,6 +25,10 @@ Things.I18nMsgBehaviorImpl = {
 
     /**
      * 메시지 치환 정보
+     * ``` js
+     *  text : department {1}'s leader is {2}
+     *  json : {"1":"전략사업","2":"홍길동"}'
+     * ```
      */
     dataSet:{
       type: Object,
@@ -32,7 +36,7 @@ Things.I18nMsgBehaviorImpl = {
     },
 
     /**
-     * 메시지
+     * 반환 받는 메시지
      */
     msg: {
       type: String,
@@ -77,7 +81,7 @@ Things.I18nMsgBehaviorImpl = {
   /**
    * msgid가 바뀌면 메시지 변경
    *
-   * @param {String} newMsgid
+   * @param {String} dataSet
    */
   _dataSetChanged: function(dataSet) {
     this.msg = this.i18nTranslate(this.msgid, this.dataSet);

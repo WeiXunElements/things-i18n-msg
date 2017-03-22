@@ -2,6 +2,7 @@
   "fr":{
     "days" : "journées",
     "hours": "heures",
-    "minutes": "minutes"
+    "minutes": "minutes",
+    "msg": "fr:{1}'s Mr.{2}"
   }
 }

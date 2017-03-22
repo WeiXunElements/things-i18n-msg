@@ -5,7 +5,7 @@ window.Things = window.Things || {};
 window.Things.DataGlobal = window.Things.DataGlobal||{};
 
 /**
- * I18n 기본 메시지 Behavior. msgid로 부터 메시지를 translate한다.
+ ### I18n 기본 메시지 Behavior. msgid로 부터 메시지를 번역한다.
  *
  * @polymerBehavior Things.I18nTranslateBehavior
  */
@@ -17,7 +17,14 @@ Things.I18nTranslateBehavior = {
       Things.DataGlobal.tt = this.i18nT;
     }
   },
-
+  /**
+   * _TODO: 추후 Setting이나 글로벌 변수로 동적 화면의 용어를 클라이언트에서 변환할 지 여부를 판단하여_
+   * _translate 해주거나 안 하거나 결정. 현재는 서버에서 변환하여 전달_
+   *
+   * @param {String} msgId **_: message의 키 입력_**
+   *
+   * @return {String}  **_: 변역 요청한 정보의 키 반환_**
+   */
   i18nT: function(msgId) {
     // TODO 추후 Setting이나 글로벌 변수로 동적 화면의 용어를 클라이언트에서 변환할 지 여부를 판단하여
     // translate 해주거나 안 하거나 결정. 현재는 서버에서 변환하여 전달
@@ -25,15 +32,14 @@ Things.I18nTranslateBehavior = {
   },
 
   /**
-   * i18n Language Set에서 메시지 아이디로 메시지를 찾는다.
+   * **_i18n Language Set에서 메시지 아이디로 메시지를 찾는다._**
    *
-   * @param {string=} msgId Optional message id to lookup. If left off,
-   * the instance's `msgid` property is used.
+   * @param {String} msgId **_Optional message id to lookup. If left off,the instance's `msgid` property is used.)_**
    *
-   * @param {Object=} dataSet 검색하는 Message중에서 대체해야하는 변수를 key:Value 형태로
-   * 전송하여 msg내 해당 되는 Key와 같은 변수가 있으면 replace 없으면 아무작업하지 않음.
+   * @param {Object} dataSet **_검색하는 Message중에서 대체해야하는 변수를 Json: key:Value 형태로 전송하여 msg내 해당 되는 Key와 같은 변수가 있으면 replace 없으면 아무작업하지 않음._**
    *
-   * @return {string|null} a message in the current locale. Translated message or `null` if not found,
+   * @return {String} **_a message in the current locale. Translated message or `null` if not found,_**
+   *
    */
   i18nTranslate: function(msgId, dataSet) {
     // Things.DataGlobal.locale ? null : Things.DataGlobal.locale = 'en-US';
@@ -70,7 +76,14 @@ Things.I18nTranslateBehavior = {
       warnMsg += msgId + ') was not found!'
       console.warn(warnMsg);
       langSet[msgId] = msgId
-      return this.innerHTML || msgId;
+      var msgValue = this.innerHTML || msgId;
+
+      Object.keys(dataSet).forEach(function(data) {
+        var bracedData = '\\'+'{' + data.replace(/\$/, '\\$') + '\\'+'}';
+        var regEx = new RegExp(bracedData, "gi");
+        msgValue = msgValue.replace(regEx, dataSet[data]);
+      });
+      return msgValue
     }
   }
 };
