@@ -78,11 +78,13 @@ Things.I18nTranslateBehavior = {
       langSet[msgId] = msgId
       var msgValue = this.innerHTML || msgId;
 
-      Object.keys(dataSet).forEach(function(data) {
-        var bracedData = '\\'+'{' + data.replace(/\$/, '\\$') + '\\'+'}';
-        var regEx = new RegExp(bracedData, "gi");
-        msgValue = msgValue.replace(regEx, dataSet[data]);
-      });
+      if(dataSet&&msgValue){
+        Object.keys(dataSet).forEach(function(data) {
+          var bracedData = '\\'+'{' + data.replace(/\$/, '\\$') + '\\'+'}';
+          var regEx = new RegExp(bracedData, "gi");
+          msgValue = msgValue.replace(regEx, dataSet[data]);
+        });
+      }
       return msgValue
     }
   }
