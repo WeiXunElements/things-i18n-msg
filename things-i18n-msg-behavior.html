@@ -29,6 +29,8 @@ Things.I18nMsgBehaviorImpl = {
      *  text : department {1}'s leader is {2}
      *  json : {"1":"전략사업","2":"홍길동"}'
      * ```
+     * ******
+     * @type {Object}
      */
     dataSet:{
       type: Object,
@@ -37,6 +39,8 @@ Things.I18nMsgBehaviorImpl = {
 
     /**
      * 반환 받는 메시지
+     * ******
+     * @type {String}
      */
     msg: {
       type: String,
@@ -45,6 +49,8 @@ Things.I18nMsgBehaviorImpl = {
 
     /**
      * i18n 데이터 셋의 변경을 자동으로 반영할 것인지 여부
+     * ******
+     * @type {Boolean}
      */
     auto: {
       type: Boolean,
@@ -54,6 +60,7 @@ Things.I18nMsgBehaviorImpl = {
 
   /**
    * LifeCycle - Ready
+   * ******
    */
   ready: function() {
     if(this.auto) {

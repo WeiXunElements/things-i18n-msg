@@ -38,6 +38,7 @@
 
       /**
        * 다국어 외부 추출
+       * ********
        */
       exportLocales: function() {
         var localeObject = Things.DataGlobal.locales[Things.DataGlobal.locale];
@@ -55,6 +56,7 @@
 
       /**
        * localhost인지 아닌지에 따라 Develop mode인지 판단
+       * ******
        */
       isDevelopMode: function() {
         return window.location.hostname == 'localhost'
