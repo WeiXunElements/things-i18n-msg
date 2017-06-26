@@ -18,14 +18,14 @@
     "/test/"
   ],
   "dependencies": {
-    "polymer": "Polymer/polymer#^1.2.0",
-    "things-global-behavior": "ThingsElements/things-global-behavior",
-    "things-msg-box-behavior": "ThingsElements/things-msg-box-behavior",
-    "paper-icon-button": "^1.0.7"
+    "polymer": "Polymer/polymer#^2.0.0",
+    "things-global-behavior": "ThingsElements/things-global-behavior#polymer-2",
+    "things-msg-box-behavior": "ThingsElements/things-msg-box-behavior#polymer-2",
+    "paper-icon-button": "^2.0.0"
   },
   "devDependencies": {
-    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
-    "web-component-tester": "^4.0.0",
-    "iron-demo-helpers": "^1.2.3"
+    "iron-component-page": "PolymerElements/iron-component-page#^3.0.0",
+    "web-component-tester": "Polymer/web-component-tester#^6.0.0-prerelease.7",
+    "iron-demo-helpers": "^2.0.0"
   }
 }
