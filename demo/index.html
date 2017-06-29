@@ -1,5 +1,8 @@
+<!--
+@license
+Copyright (c) 2017, HatioLab Inc. All right reserved.
+-->
 <!doctype html>
-<!-- Copyright Eric Bidelman <ebidel@gmail.com> -->
 <html lang="en">
 
 <head>
@@ -18,7 +21,6 @@
     <p class="paper-font-subhead">Things i18n </p>
     <demo-snippet class="centered-demo">
         <template>
-            <!--Locale Constroller-->
             <dom-module id="locale-selector">
               <template>
                 <style>
@@ -51,8 +53,8 @@
                     var self = this;
                     self.set('globals.baseUrl', 'http://localhost:8080/components/things-i18n-msg/demo');
                     self.set('globals.locale', this.$.selector.value);
-                    
-                    this.$.selector.addEventListener('change', function(event) {
+
+                                        this.$.selector.addEventListener('change', function(event) {
                         self.set('globals.locale', event.target.value);
                         self.set('locale', event.target.value);
                     });
@@ -66,7 +68,6 @@
     <demo-snippet class="centered-demo">
         <template>
           <template is="dom-bind">
-            <!--  auto  locale value-->
             <locale-selector></locale-selector>
             <things-i18n-src host="http://localhost:8080/components/things-i18n-msg/demo"></things-i18n-src>
               <p>"Days"선택된 언어에서의 표현은:
@@ -79,7 +80,6 @@
     <demo-snippet class="centered-demo">
         <template>
           <template is="dom-bind">
-            <!-- -->
             <locale-selector></locale-selector>
             <things-i18n-src host="http://localhost:8080/components/things-i18n-msg/demo"></things-i18n-src>
             <things-i18n-msg auto
@@ -95,7 +95,6 @@
     <demo-snippet class="centered-demo">
         <template>
           <template is="dom-bind">
-              <!--  locale binding-->
               <locale-selector></locale-selector>
               <things-i18n-src host="http://localhost:8080/components/things-i18n-msg/demo"></things-i18n-src>
               <things-i18n-msg auto
