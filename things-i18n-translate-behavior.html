@@ -3,95 +3,92 @@
 Copyright © HatioLab Inc. All rights reserved.
 -->
 <script>
+  window.Things = window.Things || {};
+  // dataGlobal이 늦게 추가 될 수 있어서 없을 경우 초기화
+  window.Things.DataGlobal = window.Things.DataGlobal || {};
 
-window.Things = window.Things || {};
-// dataGlobal이 늦게 추가 될 수 있어서 없을 경우 초기화
-window.Things.DataGlobal = window.Things.DataGlobal||{};
-
-/**
+  /**
  ### I18n 기본 메시지 Behavior. msgid로 부터 메시지를 번역한다.
  *
  * @polymerBehavior Things.I18nTranslateBehavior
  */
-Things.I18nTranslateBehavior = {
+  Things.I18nTranslateBehavior = {
+    ready: function () {
+      if (!Things.DataGlobal.t) {
+        Things.DataGlobal.t = this.i18nTranslate;
+        Things.DataGlobal.tt = this.i18nT;
+        window.t = Things.DataGlobal.t;
+        window.tt = Things.DataGlobal.tt;
+      }
+    },
+    /**
+     * _TODO: 추후 Setting이나 글로벌 변수로 동적 화면의 용어를 클라이언트에서 변환할 지 여부를 판단하여_
+     * _translate 해주거나 안 하거나 결정. 현재는 서버에서 변환하여 전달_
+     *******
+     * @param {String} msgId **_: message의 키 입력_**
+     *
+     * @return {String}  **_: 변역 요청한 정보의 키 반환_**
+     */
+    i18nT: function (msgId) {
+      // TODO 추후 Setting이나 글로벌 변수로 동적 화면의 용어를 클라이언트에서 변환할 지 여부를 판단하여
+      // translate 해주거나 안 하거나 결정. 현재는 서버에서 변환하여 전달
+      return msgId;
+    },
 
-  ready: function() {
-    if(!Things.DataGlobal.t) {
-      Things.DataGlobal.t = this.i18nTranslate;
-      Things.DataGlobal.tt = this.i18nT;
-    }
-  },
-  /**
-   * _TODO: 추후 Setting이나 글로벌 변수로 동적 화면의 용어를 클라이언트에서 변환할 지 여부를 판단하여_
-   * _translate 해주거나 안 하거나 결정. 현재는 서버에서 변환하여 전달_
-   *******
-   * @param {String} msgId **_: message의 키 입력_**
-   *
-   * @return {String}  **_: 변역 요청한 정보의 키 반환_**
-   */
-  i18nT: function(msgId) {
-    // TODO 추후 Setting이나 글로벌 변수로 동적 화면의 용어를 클라이언트에서 변환할 지 여부를 판단하여
-    // translate 해주거나 안 하거나 결정. 현재는 서버에서 변환하여 전달
-    return msgId;
-  },
+    /**
+     * **_i18n Language Set에서 메시지 아이디로 메시지를 찾는다._**
+     *******
+     * @param {String} msgId **_Optional message id to lookup. If left off,the instance's `msgid` property is used.)_**
+     *
+     * @param {Object} dataSet **_검색하는 Message중에서 대체해야하는 변수를 Json: key:Value 형태로 전송하여 msg내 해당 되는 Key와 같은 변수가 있으면 replace 없으면 아무작업하지 않음._**
+     *
+     * @return {String} **_a message in the current locale. Translated message or `null` if not found,_**
+     *
+     */
+    i18nTranslate: function (msgId, dataSet) {
+      // Things.DataGlobal.locale ? null : Things.DataGlobal.locale = 'en-US';
 
-  /**
-   * **_i18n Language Set에서 메시지 아이디로 메시지를 찾는다._**
-   *******
-   * @param {String} msgId **_Optional message id to lookup. If left off,the instance's `msgid` property is used.)_**
-   *
-   * @param {Object} dataSet **_검색하는 Message중에서 대체해야하는 변수를 Json: key:Value 형태로 전송하여 msg내 해당 되는 Key와 같은 변수가 있으면 replace 없으면 아무작업하지 않음._**
-   *
-   * @return {String} **_a message in the current locale. Translated message or `null` if not found,_**
-   *
-   */
-  i18nTranslate: function(msgId, dataSet) {
-    // Things.DataGlobal.locale ? null : Things.DataGlobal.locale = 'en-US';
+      if (!msgId || !Things.DataGlobal || !Things.DataGlobal.locales || !Things.DataGlobal.locale) {
+        return this.innerHTML || msgId;
+      }
 
-    if(!msgId || !Things.DataGlobal || !Things.DataGlobal.locales || !Things.DataGlobal.locale) {
-      return this.innerHTML || msgId;
-    }
+      var langSet = Things.DataGlobal.locales[Things.DataGlobal.locale];
+      var message = {};
 
-    var langSet = Things.DataGlobal.locales[Things.DataGlobal.locale];
-    var message = {};
-
-    if(!langSet) {
-      return this.innerHTML || msgId;
-    } else {
-      message = langSet[msgId];
-    }
-
-    if (langSet && message) {
-      if(!dataSet) {
-        return message;
-
+      if (!langSet) {
+        return this.innerHTML || msgId;
       } else {
-        Object.keys(dataSet).forEach(function(data) {
-          var bracedData = '\\'+'{' + data.replace(/\$/, '\\$') + '\\'+'}';
-          var regEx = new RegExp(bracedData, "gi");
-          message = message.replace(regEx, dataSet[data]);
-        });
-
-        return message;
+        message = langSet[msgId];
       }
 
-    } else {
-      var warnMsg = this.localName ? this.localName + ': msgid (' : '(';
-      warnMsg += msgId + ') was not found!'
-      console.warn(warnMsg);
-      langSet[msgId] = msgId
-      var msgValue = this.innerHTML || msgId;
+      if (langSet && message) {
+        if (!dataSet) {
+          return message;
+        } else {
+          Object.keys(dataSet).forEach(function (data) {
+            var bracedData = "\\" + "{" + data.replace(/\$/, "\\$") + "\\" + "}";
+            var regEx = new RegExp(bracedData, "gi");
+            message = message.replace(regEx, dataSet[data]);
+          });
 
-      if(dataSet&&msgValue){
-        Object.keys(dataSet).forEach(function(data) {
-          var bracedData = '\\'+'{' + data.replace(/\$/, '\\$') + '\\'+'}';
-          var regEx = new RegExp(bracedData, "gi");
-          msgValue = msgValue.replace(regEx, dataSet[data]);
-        });
+          return message;
+        }
+      } else {
+        var warnMsg = this.localName ? this.localName + ": msgid (" : "(";
+        warnMsg += msgId + ") was not found!";
+        console.warn(warnMsg);
+        langSet[msgId] = msgId;
+        var msgValue = this.innerHTML || msgId;
+
+        if (dataSet && msgValue) {
+          Object.keys(dataSet).forEach(function (data) {
+            var bracedData = "\\" + "{" + data.replace(/\$/, "\\$") + "\\" + "}";
+            var regEx = new RegExp(bracedData, "gi");
+            msgValue = msgValue.replace(regEx, dataSet[data]);
+          });
+        }
+        return msgValue;
       }
-      return msgValue
-    }
-  }
-};
-
+    },
+  };
 </script>
