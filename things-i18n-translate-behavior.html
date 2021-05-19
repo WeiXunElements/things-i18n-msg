@@ -1,17 +1,13 @@
-<!--
-@license
-Copyright © HatioLab Inc. All rights reserved.
--->
 <script>
   window.Things = window.Things || {};
   // dataGlobal이 늦게 추가 될 수 있어서 없을 경우 초기화
   window.Things.DataGlobal = window.Things.DataGlobal || {};
 
   /**
- ### I18n 기본 메시지 Behavior. msgid로 부터 메시지를 번역한다.
- *
- * @polymerBehavior Things.I18nTranslateBehavior
- */
+  ### I18n 기본 메시지 Behavior. msgid로 부터 메시지를 번역한다.
+  *
+  * @polymerBehavior Things.I18nTranslateBehavior
+  */
   Things.I18nTranslateBehavior = {
     ready: function () {
       if (!Things.DataGlobal.t) {
@@ -26,13 +22,28 @@ Copyright © HatioLab Inc. All rights reserved.
      * _translate 해주거나 안 하거나 결정. 현재는 서버에서 변환하여 전달_
      *******
      * @param {String} msgId **_: message의 키 입력_**
+     * @param {Array} dataSet **_검색하는 Message중에서 대체해야하는 변수를 array로 전송하여서 순서대로 replace 함._**
      *
      * @return {String}  **_: 변역 요청한 정보의 키 반환_**
      */
-    i18nT: function (msgId) {
-      // TODO 추후 Setting이나 글로벌 변수로 동적 화면의 용어를 클라이언트에서 변환할 지 여부를 판단하여
-      // translate 해주거나 안 하거나 결정. 현재는 서버에서 변환하여 전달
-      return msgId;
+    i18nT: function (msgId, dataSet) {
+      if (!msgId || !Things.DataGlobal || !Things.DataGlobal.messages || !Things.DataGlobal.locale) {
+        return msgId;
+      }
+      const msgSet = Things.DataGlobal.messages[Things.DataGlobal.locale];
+      if (!msgSet) {
+        return msgId;
+      }
+      let message = msgSet[msgId];
+      if (!dataSet || !message) {
+        return message;
+      }
+      for (let i = 0; i < dataSet.length; i++) {
+        let bracedData = "\\" + "{" + i + "\\" + "}";
+        let regEx = new RegExp(bracedData, "gi");
+        message = message.replace(regEx, dataSet[i]);
+      }
+      return message;
     },
 
     /**
