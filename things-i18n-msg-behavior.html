@@ -1,108 +1,104 @@
 <!--
 @license
-Copyright © HatioLab Inc. All rights reserved.
+Copyright © 2015-2021 Shenzhen Weixun All rights reserved.
 -->
-<link rel="import" href="./things-i18n-translate-behavior.html">
+<link rel="import" href="./things-i18n-translate-behavior.html" />
 
 <script>
+  window.Things = window.Things || {}; //다국어도 global에서 관리
 
-window.Things = window.Things || {}; //다국어도 global에서 관리
-
-/**
+  /**
  ### I18n 메시지 Behavior. Things.I18nTranslateBehavior를 확장한 Behavior
 
  * * ** auto를 true로 설정하면 i18n DataSet이 변경될 때 마다 이벤트를 받아 값을 갱신한다.**
  *
  * @polymerBehavior Things.I18nMsgBehavior
  */
-Things.I18nMsgBehaviorImpl = {
+  Things.I18nMsgBehaviorImpl = {
+    properties: {
+      /**
+       * 메시지 아이디
+       */
+      msgid: {
+        type: String,
+        observer: "_msgidChanged",
+      },
 
-  properties: {
+      /**
+       * 메시지 치환 정보
+       * ``` js
+       *  text : department {1}'s leader is {2}
+       *  json : {"1":"전략사업","2":"홍길동"}'
+       * ```
+       * ******
+       * @type {Object}
+       */
+      dataSet: {
+        type: Object,
+        observer: "_dataSetChanged",
+      },
 
-    /**
-     * 메시지 아이디
-     */
-    msgid: {
-      type: String,
-      observer: '_msgidChanged'
+      /**
+       * 반환 받는 메시지
+       * ******
+       * @type {String}
+       */
+      msg: {
+        type: String,
+        notify: true,
+      },
+
+      /**
+       * i18n 데이터 셋의 변경을 자동으로 반영할 것인지 여부
+       * ******
+       * @type {Boolean}
+       */
+      auto: {
+        type: Boolean,
+        value: false,
+      },
     },
 
     /**
-     * 메시지 치환 정보
-     * ``` js
-     *  text : department {1}'s leader is {2}
-     *  json : {"1":"전략사업","2":"홍길동"}'
-     * ```
+     * LifeCycle - Ready
      * ******
-     * @type {Object}
      */
-    dataSet:{
-      type: Object,
-      observer: '_dataSetChanged'
+    ready: function () {
+      if (this.auto) {
+        document.addEventListener(
+          "things-i18n-ready",
+          function () {
+            var msgId = this.msgid;
+            this.msgid = null;
+            this.msgid = msgId;
+          }.bind(this)
+        );
+      }
     },
 
     /**
-     * 반환 받는 메시지
-     * ******
-     * @type {String}
+     * msgid가 바뀌면 메시지 변경
+     *
+     * @param {String} newMsgid
+     * @param {String} oldMsgid
      */
-    msg: {
-      type: String,
-      notify: true
+    _msgidChanged: function (newMsgid, oldMsgid) {
+      if (newMsgid != oldMsgid) {
+        this.msg = this.i18nTranslate(newMsgid, this.dataSet);
+        this.innerHTML = this.msg;
+      }
     },
 
     /**
-     * i18n 데이터 셋의 변경을 자동으로 반영할 것인지 여부
-     * ******
-     * @type {Boolean}
+     * msgid가 바뀌면 메시지 변경
+     *
+     * @param {String} dataSet
      */
-    auto: {
-      type: Boolean,
-      value: false
-    }
-  },
+    _dataSetChanged: function (dataSet) {
+      this.msg = this.i18nTranslate(this.msgid, this.dataSet);
+      this.innerHTML = this.msg;
+    },
+  };
 
-  /**
-   * LifeCycle - Ready
-   * ******
-   */
-  ready: function() {
-    if(this.auto) {
-      document.addEventListener('things-i18n-ready', function() {
-        var msgId = this.msgid;
-        this.msgid = null;
-        this.msgid = msgId;
-      }.bind(this));
-    }
-  },
-
-  /**
-   * msgid가 바뀌면 메시지 변경
-   *
-   * @param {String} newMsgid
-   * @param {String} oldMsgid
-   */
-  _msgidChanged: function(newMsgid, oldMsgid) {
-    if(newMsgid != oldMsgid) {
-      this.msg = this.i18nTranslate(newMsgid, this.dataSet);
-      this.innerHTML = this.msg
-    }
-  },
-
-  /**
-   * msgid가 바뀌면 메시지 변경
-   *
-   * @param {String} dataSet
-   */
-  _dataSetChanged: function(dataSet) {
-    this.msg = this.i18nTranslate(this.msgid, this.dataSet);
-    this.innerHTML = this.msg
-  }
-};
-
-Things.I18nMsgBehavior = [
-  Things.I18nMsgBehaviorImpl,
-  Things.I18nTranslateBehavior
-]
-
+  Things.I18nMsgBehavior = [Things.I18nMsgBehaviorImpl, Things.I18nTranslateBehavior];
 </script>

@@ -1,20 +1,19 @@
 <!--
 @license
-Copyright © HatioLab Inc. All rights reserved.
+Copyright © 2015-2021 Shenzhen Weixun All rights reserved.
 -->
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes" />
 
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
 
-    <link rel="import" href="../things-i18n-msg.html">
+    <link rel="import" href="../things-i18n-msg.html" />
   </head>
   <body>
-
     <test-fixture id="things-i18n-msg-fixture">
       <template>
         <things-i18n-msg>
@@ -24,42 +23,39 @@ Copyright © HatioLab Inc. All rights reserved.
     </test-fixture>
 
     <script>
-      suite('<things-i18n-msg>', function() {
-
+      suite("<things-i18n-msg>", function () {
         var myEl;
 
-        setup(function() {
-          myEl = fixture('things-i18n-msg-fixture');
+        setup(function () {
+          myEl = fixture("things-i18n-msg-fixture");
         });
 
-        test('defines the "author" property', function() {
-          assert.equal(myEl.author.name, 'Dimitri Glazkov');
-          assert.equal(myEl.author.image, 'http://addyosmani.com/blog/wp-content/uploads/2013/04/unicorn.jpg');
+        test('defines the "author" property', function () {
+          assert.equal(myEl.author.name, "Dimitri Glazkov");
+          assert.equal(myEl.author.image, "http://addyosmani.com/blog/wp-content/uploads/2013/04/unicorn.jpg");
         });
 
-        test('says hello', function() {
-          assert.equal(myEl.sayHello(), 'things-i18n-msg says, Hello World!');
+        test("says hello", function () {
+          assert.equal(myEl.sayHello(), "things-i18n-msg says, Hello World!");
 
-          var greetings = myEl.sayHello('greetings Earthlings');
-          assert.equal(greetings, 'things-i18n-msg says, greetings Earthlings');
+          var greetings = myEl.sayHello("greetings Earthlings");
+          assert.equal(greetings, "things-i18n-msg says, greetings Earthlings");
         });
 
-        test('fires lasers', function(done) {
-          myEl.addEventListener('things-i18n-msg-lasers', function(event) {
-            assert.equal(event.detail.sound, 'Pew pew!');
+        test("fires lasers", function (done) {
+          myEl.addEventListener("things-i18n-msg-lasers", function (event) {
+            assert.equal(event.detail.sound, "Pew pew!");
             done();
           });
           myEl.fireLasers();
         });
 
-        test('distributed children', function() {
+        test("distributed children", function () {
           var els = myEl.getContentChildren();
-          assert.equal(els.length, 1, 'one distributed node');
-          assert.equal(els[0], myEl.querySelector('h2'), 'content distributed correctly');
+          assert.equal(els.length, 1, "one distributed node");
+          assert.equal(els[0], myEl.querySelector("h2"), "content distributed correctly");
         });
-
       });
     </script>
-
   </body>
 </html>

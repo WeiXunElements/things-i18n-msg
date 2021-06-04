@@ -1,8 +1,8 @@
 {
   "name": "things-i18n-msg",
-  "version": "v2.2.2",
+  "version": "v2.2.3",
   "authors": [
-    "Hatio Lab. <heartyoh@hatiolab.com>"
+    "Shenzhen Weixun"
   ],
   "description": "element 태그로 i18n 데이터를 가져오는 element / An element to get i18n data with element tag.",
   "keywords": [
@@ -11,8 +11,6 @@
     "seed"
   ],
   "main": "elements.html",
-  "license": "http://license.hatiolab.com/EULA",
-  "homepage": "http://elements.hatiolab.com/",
   "ignore": [
     "/.*",
     "/test/"

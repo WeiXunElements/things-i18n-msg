@@ -1,12 +1,12 @@
 <!--
 @license
-Copyright © HatioLab Inc. All rights reserved.
+Copyright © 2015-2021 Shenzhen Weixun All rights reserved.
 -->
-<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../polymer/polymer.html" />
 
-<link rel="import" href="../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../paper-icon-button/paper-icon-button.html" />
 
-<link rel="import" href="things-i18n-msg.html">
+<link rel="import" href="things-i18n-msg.html" />
 
 <!--
     기존에 조회 받은 다국어 추출용 컴포넌트
@@ -20,39 +20,46 @@ Copyright © HatioLab Inc. All rights reserved.
   <template>
     <style>
       paper-icon-button {
-        @apply(--things-small-icon);
+        @apply (--things-small-icon);
         float: right;
-        margin-top: 1px;margin-right: 22px;
+        margin-top: 1px;
+        margin-right: 22px;
       }
     </style>
 
-    <template is="dom-if" if={{isDevelopMode()}}>
-      <things-i18n-msg msgid="button.export-locale-file" msg="{{labelExportLocale}}" auto hidden>export locale file</things-i18n-msg>
-      <paper-icon-button id="locales-download" icon="icons:language" title="[[labelExportLocale]]" on-tap="exportLocales">
+    <template is="dom-if" if="{{isDevelopMode()}}">
+      <things-i18n-msg msgid="button.export-locale-file" msg="{{labelExportLocale}}" auto hidden
+        >export locale file</things-i18n-msg
+      >
+      <paper-icon-button
+        id="locales-download"
+        icon="icons:language"
+        title="[[labelExportLocale]]"
+        on-tap="exportLocales"
+      >
       </paper-icon-button>
     </template>
   </template>
 
   <script>
     Polymer({
-      is: 'things-i18n-export-locales',
+      is: "things-i18n-export-locales",
 
-      properties: {
-      },
+      properties: {},
 
       /**
        * 다국어 외부 추출
        * ********
        */
-      exportLocales: function() {
+      exportLocales: function () {
         var localeObject = Things.DataGlobal.locales[Things.DataGlobal.locale];
 
         if (localeObject) {
-          var data = 'text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(localeObject, null, 2));
-          var a = document.createElement('a');
-          a.href = 'data:' + data;
-          a.download = 'locale-' + Things.DataGlobal.locale + '.json';
-          a.innerHTML = '';
+          var data = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(localeObject, null, 2));
+          var a = document.createElement("a");
+          a.href = "data:" + data;
+          a.download = "locale-" + Things.DataGlobal.locale + ".json";
+          a.innerHTML = "";
           this.appendChild(a);
           a.click();
         }
@@ -62,9 +69,9 @@ Copyright © HatioLab Inc. All rights reserved.
        * localhost인지 아닌지에 따라 Develop mode인지 판단
        * ******
        */
-      isDevelopMode: function() {
-        return window.location.hostname == 'localhost'
-      }
+      isDevelopMode: function () {
+        return window.location.hostname == "localhost";
+      },
     });
   </script>
 </dom-module>
