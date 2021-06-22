@@ -1,6 +1,6 @@
 {
   "name": "things-i18n-msg",
-  "version": "v2.2.3",
+  "version": "v2.2.4",
   "authors": [
     "Shenzhen Weixun"
   ],
@@ -17,8 +17,8 @@
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#^1.2.0",
-    "things-global-behavior": "ThingsElements/things-global-behavior",
-    "things-msg-box-behavior": "ThingsElements/things-msg-box-behavior",
+    "things-global-behavior": "WeiXunElements/things-global-behavior",
+    "things-msg-box-behavior": "WeiXunElements/things-msg-box-behavior",
     "paper-icon-button": "^1.0.7"
   },
   "devDependencies": {
