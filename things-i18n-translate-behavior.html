@@ -7,6 +7,9 @@ Copyright © 2015-2021 Shenzhen Weixun All rights reserved.
   // dataGlobal이 늦게 추가 될 수 있어서 없을 경우 초기화
   window.Things.DataGlobal = window.Things.DataGlobal || {};
 
+  window.t = window.t || {};
+  window.tt = window.tt || {};
+
   /**
   ### I18n 기본 메시지 Behavior. msgid로 부터 메시지를 번역한다.
   *
@@ -43,8 +46,8 @@ Copyright © 2015-2021 Shenzhen Weixun All rights reserved.
         return message;
       }
       for (let i = 0; i < dataSet.length; i++) {
-        let bracedData = "\\" + "{" + i + "\\" + "}";
-        let regEx = new RegExp(bracedData, "gi");
+        let bracedData = '\\' + '{' + i + '\\' + '}';
+        let regEx = new RegExp(bracedData, 'gi');
         message = message.replace(regEx, dataSet[i]);
       }
       return message;
@@ -81,24 +84,24 @@ Copyright © 2015-2021 Shenzhen Weixun All rights reserved.
           return message;
         } else {
           Object.keys(dataSet).forEach(function (data) {
-            var bracedData = "\\" + "{" + data.replace(/\$/, "\\$") + "\\" + "}";
-            var regEx = new RegExp(bracedData, "gi");
+            var bracedData = '\\' + '{' + data.replace(/\$/, '\\$') + '\\' + '}';
+            var regEx = new RegExp(bracedData, 'gi');
             message = message.replace(regEx, dataSet[data]);
           });
 
           return message;
         }
       } else {
-        var warnMsg = this.localName ? this.localName + ": msgid (" : "(";
-        warnMsg += msgId + ") was not found!";
+        var warnMsg = this.localName ? this.localName + ': msgid (' : '(';
+        warnMsg += msgId + ') was not found!';
         console.warn(warnMsg);
         langSet[msgId] = msgId;
         var msgValue = this.innerHTML || msgId;
 
         if (dataSet && msgValue) {
           Object.keys(dataSet).forEach(function (data) {
-            var bracedData = "\\" + "{" + data.replace(/\$/, "\\$") + "\\" + "}";
-            var regEx = new RegExp(bracedData, "gi");
+            var bracedData = '\\' + '{' + data.replace(/\$/, '\\$') + '\\' + '}';
+            var regEx = new RegExp(bracedData, 'gi');
             msgValue = msgValue.replace(regEx, dataSet[data]);
           });
         }
